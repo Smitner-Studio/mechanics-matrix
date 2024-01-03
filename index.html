@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mechanics Matrix Generator</title>
+<style>
+  /* Reset some default styling */
+  *, *:before, *:after {
+    box-sizing: border-box;
+  }
+
+  /* Body styling */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f6;
+    color: #333;
+  }
+
+  /* Container for the content */
+  .container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Style for headings */
+  h2 {
+    color: #0a9396;
+  }
+
+  /* Style for the textarea */
+  textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical; /* Allow vertical resizing */
+  }
+
+  /* Style for buttons */
+  button {
+    background-color: #005f73;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #003d4d;
+  }
+
+  hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  }
+
+  /* Style for preformatted text areas */
+  #output, #htmlOutput {
+    white-space: pre-wrap; /* Wrap content */
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    overflow: auto;
+  }
+
+  /* Style for tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #e9ecefe6;
+    color: #333;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f5f5f5;
+  }
+
+  /* Footer styling */
+footer {
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  color: #333; /* Dark text color */
+}
+
+footer a {
+  color: #0066cc; /* Color for the link */
+  text-decoration: none; /* No underline */
+}
+
+footer a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+</style>
+
+</head>
+<body>
+	<h1>Mechanics Matrix Generator</h1>
+<article>
+        <section>
+            <h2>What is a Mechanics Matrix?</h2>
+            <p>This technique, known as a <strong>mechanics matrix</strong>, is a tool used in game design to explore and brainstorm potential interactions and mechanics within a game. By systematically laying out all possible combinations of game elements, designers can think creatively about how these elements might interact. The matrix format helps to organize thoughts and ensures that no possible combination is overlooked.</p>
+        </section>
+        <section>
+		<section>
+    <h2>How Does it Work?</h2>
+    <p>Consider a generic game with elements <b>A</b> and <b>B</b>. Using the mechanics matrix, designers might explore interactions such as '<b>A</b> meets <b>B</b>', leading to brainstorming scenarios where <b>A</b> might enhance, modify, or react to <b>B</b> in various ways. For instance, if <b>A</b> represents a character and <b>B</b> an environmental feature, the matrix might prompt ideas for how the character can utilize or be affected by that feature. This methodical approach ensures a thorough exploration of potential game dynamics, fostering creativity and innovation in design.</p>
+</section>
+
+        <section>
+            <h2>Why is it Useful?</h2>
+            <p>This process is useful because it prompts creative thinking and can lead to the discovery of innovative mechanics that might not be immediately obvious. It encourages designers to think outside the box and explore the full potential of their game's elements. By considering every possible interaction, designers can create a richer, more engaging gaming experience. Additionally, it helps in identifying mechanics that complement each other and contribute to cohesive gameplay.</p>
+        </section>
+    </article>
+
+<hr>
+<h1>Generator</h1>
+<label for="inputItems">Enter items separated by commas:</label>
+<textarea id="inputItems">Player, Door, Acid, Explosive Gas</textarea>
+<button onclick="generateTable()">Generate Table</button>
+<h3>Markdown Output:</h3>
+<pre id="output"></pre>
+
+<h3>Rendered HTML Table:</h3>
+<div id="htmlOutput"></div>
+
+<footer>
+  <p>Created by Arran for <a href="https://smitner.studio/" target="_blank">Smitner.Studio</a></p>
+</footer>
+<script>
+window.onload = function() {
+  generateTable();  // Calls the generateTable function when the page loads
+};
+
+function generateTable() {
+  const items = document.getElementById('inputItems').value.split(',').map(item => item.trim());
+  let markdown = '|     | ' + items.join(' | ') + ' |\n';
+  markdown += '|-----|' + items.map(() => '------:').join('|') + '|\n';
+  
+  items.forEach(rowItem => {
+    const row = items.map(colItem => {
+      if (rowItem === colItem) {
+        return '-';
+      } else {
+        return `When *${rowItem}* meets *${colItem}*...`;
+      }
+    }).join(' | ');
+    markdown += `| ${rowItem} | ${row} |\n`;
+  });
+  
+  document.getElementById('output').textContent = markdown;
+  renderHTMLTable(markdown);
+}
+
+function renderHTMLTable(markdown) {
+  const rows = markdown.split('\n');
+  let htmlTable = "<table>";
+  rows.forEach((row, index) => {
+    if (row.trim() === '' || index === 1) return; // Skip empty lines and the divider line
+    let cells = row.split('|').map(cell => cell.trim());
+    cells = cells.map(cell => cell.replace(/\*(.*?)\*/g, "<strong>$1</strong>")); // Convert *text* to <strong>text</strong>
+    cells.pop();
+    cells.shift();
+    if (index === 0) {
+      htmlTable += "<tr>" + cells.map(cell => `<th>${cell}</th>`).join('') + "</tr>";
+    } else {
+      htmlTable += "<tr>" + cells.map(cell => `<td>${cell}</td>`).join('') + "</tr>";
+    }
+  });
+  htmlTable += "</table>";
+  
+  document.getElementById('htmlOutput').innerHTML = htmlTable;
+}
+
+</script>
+</body>
+</html>
+
