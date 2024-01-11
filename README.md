@@ -1,5 +1,7 @@
 # Mechanics Matrix Generator
-[smitner-studio.github.io/mechanics-matrix](http://smitner-studio.github.io/mechanics-matrix/)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F3FW513)
+
+- [Live Site](http://smitner-studio.github.io/mechanics-matrix/)
 
 ## Description
 This simple web application allows users to generate a Markdown table based on a list of items they provide. - It also renders the Markdown into an HTML table.
